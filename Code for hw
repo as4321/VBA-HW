@@ -1,0 +1,57 @@
+Sub a()
+For Each ws In Worksheets
+Dim StockName As String
+Dim SumTotal As Double
+Dim change As Double
+Dim Difference As Double
+Dim PercentChange As Double
+Dim StartValue As Double
+Dim EndValue As Double
+Dim MaxVol As Double
+Dim GreatestPercentIncrease As Double
+Dim GreatestPercentDecrease As Double
+Dim LastRow As Integer
+
+ws.Cells(1, 10).Value = "Ticker"
+ws.Cells(1, 11).Value = "Percent Change"
+ws.Cells(1, 12).Value = "Total Change"
+ws.Cells(1, 13).Value = "Total Volume"
+ws.Cells(1, 16).Value = "Greatest Volume"
+ws.Cells(2, 16).Value = "Greatest Growth"
+ws.Cells(3, 16).Value = "Least Growth"
+tablerow = 2
+SumTotal = 0
+StartValue = ws.Cells(2, 3).Value
+For i = 2 To 800000
+    If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
+        StockName = ws.Cells(i, 1).Value
+        SumTotal = ws.Cells(i, 7).Value + SumTotal
+        ws.Range("J" & tablerow).Value = StockName
+        ws.Range("M" & tablerow).Value = SumTotal
+  
+        SumTotal = 0
+        
+        EndValue = ws.Cells(i, 6).Value
+        Difference = EndValue - StartValue
+         ws.Range("L" & tablerow).Value = Difference
+        StartValue = ws.Cells(i + 1, 3).Value
+        tablerow = tablerow + 1
+       
+    Else
+        SumTotal = ws.Cells(i, 7).Value + SumTotal
+     End If
+Next i
+    LastRow = ws.Cells(Rows.Count, 12).End(xlUp).Row
+    MaxVol = Application.Max(ws.Range("m2:m" & LastRow).Value)
+    ws.Cells(1, 17).Value = MaxVol
+    GreatestPercentIncrease = Application.Max(ws.Range("k2:k" & LastRow).Value)
+     ws.Cells(2, 17).Value = GreatestPercentIncrease
+    GreatestPercentDecrease = Application.Min(ws.Range("k2:k" & LastRow).Value)
+     ws.Cells(3, 17).Value = GreatestPercentDecrease
+     
+Next ws
+    
+
+MsgBox ("Done")
+End Sub
+
